@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.marcelo.maisburguer.compose.MaisBurguerApp
 import com.marcelo.maisburguer.ui.theme.MaisBurguerTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,6 +15,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MaisBurguerTheme {
+                MaisBurguerApp()
 
             }
         }
