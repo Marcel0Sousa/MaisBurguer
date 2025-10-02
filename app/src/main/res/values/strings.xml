@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Mais Burguer</string>
-    <string name="email">Email</string>
+    <string name="label_email">Email</string>
     <string name="hint_email">Digite seu email</string>
-    <string name="password">Senha</string>
+    <string name="label_password">Senha</string>
     <string name="hint_password">Digite sua senha</string>
-    <string name="send">Login</string>
+    <string name="label_login">Login</string>
     <string name="show_password">Mostrar senha</string>
     <string name="hide_password">Ocultar senha</string>
+    <string name="remember_password">Lembrar-me</string>
+    <string name="have_account">Não tem uma conta?</string>
+    <string name="sign_up">Cadastrar</string>
+    <string name="hamburguer">Hamburguer</string>
 </resources>
