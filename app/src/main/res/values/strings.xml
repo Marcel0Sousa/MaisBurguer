@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Mais Burguer</string>
+    <string name="label_email">Email</string>
+    <string name="hint_email">Digite seu email</string>
+    <string name="label_password">Senha</string>
+    <string name="hint_password">Digite sua senha</string>
+    <string name="label_login">Login</string>
+    <string name="show_password">Mostrar senha</string>
+    <string name="hide_password">Ocultar senha</string>
+    <string name="remember_password">Lembrar-me</string>
+    <string name="have_account">Não tem uma conta?</string>
+    <string name="label_sign_up">Cadastrar</string>
+    <string name="hamburguer">Hamburguer</string>
+    <string name="alert_text">Icone do Alerta</string>
+    <string name="sign_up">Cadastro</string>
+    <string name="label_confirm_password">Confirmar senha</string>
+    <string name="hint_confirm_password">Digite novamente a senha</string>
+    <string name="label_document">CPF</string>
+    <string name="hint_document">Digite seu CPF</string>
+    <string name="label_birth_date">Data de nascimento</string>
+    <string name="hint_birth_date">Digite sua data de nascimento</string>
+    <string name="label_name">Nome</string>
+    <string name="hint_name">Digite seu nome</string>
+    <string name="label_lastname">Sobrenome</string>
+    <string name="hint_lastname">Digite seu sobrenome</string>
+    <string name="back">Voltar</string>
+    <string name="label_campo_obrigatorio">Campo obrigatório</string>
+    <string name="label_informe_um_email_valido">Informe um email válido</string>
+    <string name="label_data_de_nascimento_invalida">Data de nascimento inválida.</string>
+</resources>
