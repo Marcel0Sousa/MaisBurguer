@@ -251,7 +251,7 @@ class SignupScreenViewModel : ViewModel() {
                 val repository = MaisBurguerRepository(service)
                 val result = repository.postUser(userRequest)
 
-                Log.i("Test", "Content is $result")
+                Log.i("Test", "Content is: $result")
 
                 when (result) {
                     is UserCreateResponse.Success -> {
