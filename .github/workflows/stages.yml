@@ -1,0 +1,90 @@
+name: Generated APK AAB (Multi-Env & Upload)
+
+env:
+  main_project_module: app
+  playstore_name: MAIS BURGUER
+
+on:
+  push:
+    branches:
+      - develop
+      - 'release/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set current date as env variable
+        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Set repository name as env variable
+        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      # ----------------------------------------------------------------
+      # AMBIENTE: DEV (Geralmente Debug para facilitar testes)
+      # Comando esperado: assembleDevDebug
+      # ----------------------------------------------------------------
+      - name: Build DEV APK (Debug)
+        run: ./gradlew assembleDevDebug --stacktrace
+
+      - name: Upload DEV APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DEV-${{ env.date_today }}-${{ env.repository_name }}-APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/dev/debug/
+          retention-days: 1
+          compression-level: 6 # Nível de compressão do ZIP (0-9)
+
+      # ----------------------------------------------------------------
+      # AMBIENTE: HOM (Homologação - Release Assinado ou Debug)
+      # Assumindo Release para ficar igual produção, mas sem subir na loja
+      # ----------------------------------------------------------------
+      - name: Build HOM APK (Release)
+        run: ./gradlew assembleHomRelease
+
+      - name: Upload HOM APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: HOM-${{ env.date_today }}-${{ env.repository_name }}-APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/hom/release/
+          retention-days: 1
+          compression-level: 6
+
+      # ----------------------------------------------------------------
+      # AMBIENTE: PROD (Produção - Release)
+      # Gera APK e AAB (Bundle)
+      # ----------------------------------------------------------------
+      - name: Build PROD APK (Release)
+        run: ./gradlew assembleProdRelease
+
+      - name: Upload PROD APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PROD-${{ env.date_today }}-${{ env.repository_name }}-APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/prod/release/
+          retention-days: 1
+          compression-level: 6
+
+      - name: Build PROD Bundle (AAB)
+        run: ./gradlew ${{ env.main_project_module }}:bundleProdRelease
+
+      - name: Upload PROD AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: PROD-${{ env.date_today }}-${{ env.repository_name }}-AAB
+          path: ${{ env.main_project_module }}/build/outputs/bundle/prodRelease/
+          retention-days: 1
+          compression-level: 6
