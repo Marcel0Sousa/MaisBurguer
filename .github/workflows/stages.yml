@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build_test_security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,58 +33,34 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
-      # ----------------------------------------------------------------
-      # AMBIENTE: DEV (Geralmente Debug para facilitar testes)
-      # Comando esperado: assembleDevDebug
-      # ----------------------------------------------------------------
-      - name: Build DEV APK (Debug)
-        run: ./gradlew assembleDebug --stacktrace
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
 
-      - name: Upload DEV APK
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: DEV-${{ env.date_today }}-${{ env.repository_name }}-APK
-          path: ${{ env.main_project_module }}/build/outputs/apk/dev/debug/
-          retention-days: 1
-          compression-level: 6 # Nível de compressão do ZIP (0-9)
-
-      # ----------------------------------------------------------------
-      # AMBIENTE: HOM (Homologação - Release Assinado ou Debug)
-      # Assumindo Release para ficar igual produção, mas sem subir na loja
-      # ----------------------------------------------------------------
-      - name: Build HOM APK (Release)
-        run: ./gradlew assembleDebug
-
-      - name: Upload HOM APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: HOM-${{ env.date_today }}-${{ env.repository_name }}-APK
-          path: ${{ env.main_project_module }}/build/outputs/apk/hom/release/
+          name: Release-${{ env.date_today }}-${{ env.repository_name }}-APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/release/
           retention-days: 1
           compression-level: 6
 
-      # ----------------------------------------------------------------
-      # AMBIENTE: PROD (Produção - Release)
-      # Gera APK e AAB (Bundle)
-      # ----------------------------------------------------------------
-      - name: Build PROD APK (Release)
-        run: ./gradlew assembleDebug
+      - name: Build Release AAB
+        run: ./gradlew bundleRelease
 
-      - name: Upload PROD APK
+      - name: Upload Release AAB
         uses: actions/upload-artifact@v4
         with:
-          name: PROD-${{ env.date_today }}-${{ env.repository_name }}-APK
-          path: ${{ env.main_project_module }}/build/outputs/apk/prod/release/
+          name: Release-${{ env.date_today }}-${{ env.repository_name }}-AAB
+          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
           retention-days: 1
           compression-level: 6
 
-      - name: Build PROD Bundle (AAB)
-        run: ./gradlew ${{ env.main_project_module }}:assembleDebug
+      - name: Run Unit Tests
+        run: ./gradlew :app:testDebugUnitTest --stacktrace
 
-      - name: Upload PROD AAB
-        uses: actions/upload-artifact@v4
-        with:
-          name: PROD-${{ env.date_today }}-${{ env.repository_name }}-AAB
-          path: ${{ env.main_project_module }}/build/outputs/bundle/prodRelease/
-          retention-days: 1
-          compression-level: 6
+      - name: Perform Security Checks
+        run: |
+          echo "Placeholder for security checks."
+          echo "Consider adding tools like SAST (Static Application Security Testing) or dependency vulnerability scanning here."
+          echo "Example: 'semgrep --config auto --metrics on .'"
+          echo "Example: 'snyk test --gradle-project ${{ env.main_project_module }}'
