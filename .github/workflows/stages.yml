@@ -1,4 +1,4 @@
-name: Generated APK AAB (Multi-Env & Upload)
+name: Generated APK AAB
 
 env:
   main_project_module: app
@@ -38,7 +38,7 @@ jobs:
       # Comando esperado: assembleDevDebug
       # ----------------------------------------------------------------
       - name: Build DEV APK (Debug)
-        run: ./gradlew assembleDevDebug --stacktrace
+        run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload DEV APK
         uses: actions/upload-artifact@v4
@@ -53,7 +53,7 @@ jobs:
       # Assumindo Release para ficar igual produção, mas sem subir na loja
       # ----------------------------------------------------------------
       - name: Build HOM APK (Release)
-        run: ./gradlew assembleHomRelease
+        run: ./gradlew assembleDebug
 
       - name: Upload HOM APK
         uses: actions/upload-artifact@v4
@@ -68,7 +68,7 @@ jobs:
       # Gera APK e AAB (Bundle)
       # ----------------------------------------------------------------
       - name: Build PROD APK (Release)
-        run: ./gradlew assembleProdRelease
+        run: ./gradlew assembleDebug
 
       - name: Upload PROD APK
         uses: actions/upload-artifact@v4
@@ -79,7 +79,7 @@ jobs:
           compression-level: 6
 
       - name: Build PROD Bundle (AAB)
-        run: ./gradlew ${{ env.main_project_module }}:bundleProdRelease
+        run: ./gradlew ${{ env.main_project_module }}:assembleDebug
 
       - name: Upload PROD AAB
         uses: actions/upload-artifact@v4
