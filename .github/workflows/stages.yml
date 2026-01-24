@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_test_security:
+  build_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,34 +33,27 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
+      - name: Build Debug APK for Real Device Testing
+        run: ./gradlew assembleDebug
 
-      - name: Upload Release APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: Release-${{ env.date_today }}-${{ env.repository_name }}-APK
-          path: ${{ env.main_project_module }}/build/outputs/apk/release/
+          name: Debug-${{ env.date_today }}-${{ env.playstore_name }}-APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
           retention-days: 1
           compression-level: 6
 
-      - name: Build Release AAB
-        run: ./gradlew bundleRelease
+      - name: Build Debug AAB for Real Device Testing
+        run: ./gradlew bundleDebug
 
-      - name: Upload Release AAB
+      - name: Upload Debug AAB
         uses: actions/upload-artifact@v4
         with:
-          name: Release-${{ env.date_today }}-${{ env.repository_name }}-AAB
-          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
+          name: Debug-${{ env.date_today }}-${{ env.playstore_name }}-AAB
+          path: ${{ env.main_project_module }}/build/outputs/bundle/debug/
           retention-days: 1
           compression-level: 6
 
       - name: Run Unit Tests
         run: ./gradlew :app:testDebugUnitTest --stacktrace
-
-      - name: Perform Security Checks
-        run: |
-          echo "Placeholder for security checks."
-          echo "Consider adding tools like SAST (Static Application Security Testing) or dependency vulnerability scanning here."
-          echo "Example: 'semgrep --config auto --metrics on .'"
-          echo "Example: 'snyk test --gradle-project ${{ env.main_project_module }}'
