@@ -55,5 +55,16 @@ jobs:
           retention-days: 1
           compression-level: 6
 
+      - name: Build Android Test APK
+        run: ./gradlew :app:assembleDebugAndroidTest
+
+      - name: Upload Android Test APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Test-${{ env.date_today }}-${{ env.playstore_name }}-APK
+          path: ${{ env.main_project_module }}/build/outputs/apk/androidTest/debug/
+          retention-days: 1
+          compression-level: 6
+
       - name: Run Unit Tests
         run: ./gradlew :app:testDebugUnitTest --stacktrace
